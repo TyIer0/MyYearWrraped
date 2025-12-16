@@ -1,0 +1,38 @@
+.block
+{
+    background-color: rgb(211, 21, 21);
+    width: 1000;
+    height: 1000;
+}
+html{
+    scroll-snap-type: y mandatory;
+    background-color: rgb(63, 63, 63);
+}
+h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+section {
+    height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    position: relative;
+}
+video { 
+    padding: auto;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+@keyframes move{
+    0%{
+
+    }
+    100%{
+        motion: path();
+    }
+}
+    
