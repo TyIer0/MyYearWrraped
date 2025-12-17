@@ -1,27 +1,289 @@
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewpoint" 
-              content="width=device-width, initial-scale=1.0" />
-        <title>This Year Wrapped</title>
-        <link rel="stylesheet" href="css/main.css">
-    </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>This Year Wrapped</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html {
+      scroll-snap-type: y mandatory;
+      background-color: rgb(39, 39, 39);
+      overflow: hidden;
+      height: 100%;
+    }
+    
+    body {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 100%;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    section {
+      height: 100vh;
+      height: 100dvh; /* Dynamic viewport height for mobile */
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      position: relative;
+      width: 100%;
+    }
 
-    <body>
-        <section>
-        <video autoplay muted id="myVideo">
-            <source src="Intro.mp4" type="video/mp4">
-        </video>
-        </section>
-        <section>
-        <video autoplay muted id="myVideo">
-            <source src="page2.mp4" type="video/mp4">
-        </video>
-        </section>
-        <section>
-        <h2> Scroll on animation </h2>
-        <p>HI :3</p>
-        </section>
+    video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Changed to cover for better mobile display */
+    }
+    
+    .video-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgb(39, 39, 39);
+    }
+
+    .trigger {
+      position: absolute;
+      top: 50%;
+      height: 1px;
+      width: 100%;
+      pointer-events: none;
+    }
+    
+    /* Prevent pull-to-refresh on mobile */
+    body {
+      overscroll-behavior-y: contain;
+    }
+    
+    /* Ensure smooth scrolling on iOS */
+    @supports (-webkit-touch-callout: none) {
+      body {
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="Intro.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="page2.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="page3.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="page4.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="page5.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="page6.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="page7.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="page8.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <section class="video-section">
+    <div class="trigger"></div>
+    <video class="section-video" muted playsinline preload="metadata" webkit-playsinline>
+      <source src="page9.mp4" type="video/mp4">
+    </video>
+  </section>
+
+  <script>
+    const sections = document.querySelectorAll(".video-section");
+    const allSections = document.querySelectorAll("section");
+    let isScrolling = false;
+    let scrollTimeout;
+
+    sections.forEach(section => {
+      section._active = false;
+    });
+
+    // Preload first video
+    const firstVideo = sections[0]?.querySelector("video");
+    if (firstVideo) {
+      firstVideo.load();
+    }
+
+    // Add event listeners for video time update to scroll before end
+    sections.forEach((section, index) => {
+      const video = section.querySelector("video");
+      if (video) {
+        let hasScrolled = false;
         
-    </body>
+        video.addEventListener('timeupdate', () => {
+          const timeRemaining = video.duration - video.currentTime;
+          
+          if (timeRemaining <= 0.3 && !hasScrolled && !isScrolling) {
+            hasScrolled = true;
+            isScrolling = true;
+            
+            const currentIndex = Array.from(allSections).indexOf(section);
+            const nextSection = allSections[currentIndex + 1];
+            
+            if (nextSection) {
+              nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              
+              // Preload next video
+              const nextVideo = nextSection.querySelector("video");
+              if (nextVideo && nextVideo.readyState < 3) {
+                nextVideo.load();
+              }
+              
+              setTimeout(() => {
+                isScrolling = false;
+              }, 1000);
+            } else {
+              isScrolling = false;
+            }
+          }
+        });
+        
+        video.addEventListener('play', () => {
+          hasScrolled = false;
+        });
+        
+        // Handle loading errors
+        video.addEventListener('error', (e) => {
+          console.log('Video error:', e);
+        });
+      }
+    });
+
+    function onScroll() {
+      clearTimeout(scrollTimeout);
+      
+      scrollTimeout = setTimeout(() => {
+        const viewportCenter = window.innerHeight / 2;
+
+        sections.forEach((section, index) => {
+          const trigger = section.querySelector(".trigger");
+          const video = section.querySelector("video");
+
+          if (!trigger || !video) return;
+
+          const rect = trigger.getBoundingClientRect();
+          
+          // Increased offset for mobile - start playing earlier
+          const offset = window.innerHeight * 0.3;
+          const isApproachingCenter = rect.top <= (viewportCenter + offset) && rect.bottom >= (viewportCenter - offset);
+
+          if (isApproachingCenter && !section._active) {
+            section._active = true;
+            
+            // Ensure video is loaded
+            if (video.readyState < 3) {
+              video.load();
+            }
+            
+            video.currentTime = 0;
+            
+            // Use promise-based play with error handling
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(err => {
+                console.log("Play failed:", err);
+                // Retry play after a short delay
+                setTimeout(() => {
+                  video.play().catch(e => console.log("Retry failed:", e));
+                }, 100);
+              });
+            }
+            
+            // Preload next video
+            const nextSection = allSections[index + 1];
+            if (nextSection) {
+              const nextVideo = nextSection.querySelector("video");
+              if (nextVideo && nextVideo.readyState < 3) {
+                nextVideo.load();
+              }
+            }
+          }
+
+          if (!isApproachingCenter && section._active) {
+            section._active = false;
+            video.pause();
+          }
+        });
+      }, 50); // Debounce scroll events
+    }
+
+    // Use passive listeners for better scroll performance
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("load", onScroll);
+    
+    // Initial check with longer delay for mobile
+    setTimeout(onScroll, 300);
+    
+    // Handle orientation change
+    window.addEventListener("orientationchange", () => {
+      setTimeout(onScroll, 300);
+    });
+    
+    // Attempt to play first video on user interaction (required for iOS)
+    let hasInteracted = false;
+    const enableAutoplay = () => {
+      if (!hasInteracted) {
+        hasInteracted = true;
+        const firstVideo = sections[0]?.querySelector("video");
+        if (firstVideo) {
+          firstVideo.play().catch(e => console.log("Initial play failed:", e));
+        }
+      }
+    };
+    
+    document.addEventListener("touchstart", enableAutoplay, { once: true, passive: true });
+    document.addEventListener("click", enableAutoplay, { once: true });
+  </script>
+</body>
 </html>
