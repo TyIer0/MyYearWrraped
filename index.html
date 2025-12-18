@@ -1,44 +1,135 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>I taramisu <3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#272727">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>This Year Wrapped</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{height:100%;overflow:hidden}
-body{height:100%;overflow-y:scroll;overflow-x:hidden;scroll-snap-type:y mandatory;background:#272727;font-family:system-ui,-apple-system,sans-serif;-webkit-overflow-scrolling:touch}
-section{height:100vh;width:100%;scroll-snap-align:start;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;background:#272727;flex-shrink:0}
+body{height:100%;overflow-y:scroll;overflow-x:hidden;scroll-snap-type:y mandatory;background:#272727;font-family:-apple-system,BlinkMacSystemFont,sans-serif;-webkit-overflow-scrolling:touch;overscroll-behavior:none}
+section{height:100vh;height:100dvh;width:100%;scroll-snap-align:start;scroll-snap-stop:always;display:flex;align-items:center;justify-content:center;background:#272727;flex-shrink:0}
 video{width:100%;height:100%;object-fit:contain;background:#272727;display:block}
-#b{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:20px 40px;font-size:24px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:0;border-radius:50px;cursor:pointer;z-index:1000;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:transform .2s;-webkit-tap-highlight-color:transparent}
+#b{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);padding:20px 40px;font-size:24px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:0;border-radius:50px;cursor:pointer;z-index:1000;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:transform .2s;touch-action:manipulation}
 #b:hover{transform:translate(-50%,-50%) scale(1.05)}
 #b:active{transform:translate(-50%,-50%) scale(.95)}
 .h{display:none!important}
-@media(max-width:768px){#b{font-size:20px;padding:16px 32px}}
+#vol{position:fixed;right:20px;top:20px;z-index:999;width:40px;height:40px;background:rgba(255,255,255,.2);border:0;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;transition:all .2s;backdrop-filter:blur(10px);touch-action:manipulation}
+#vol:hover{background:rgba(255,255,255,.3);transform:scale(1.1)}
+#vol:active{transform:scale(.9)}
+@media(max-width:768px){#b{font-size:20px;padding:16px 32px}#vol{width:36px;height:36px;font-size:18px;right:15px;top:15px}}
 </style>
 </head>
 <body>
 <button id="b">Start Your Wrapped</button>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="Intro.mp4" type="video/mp4"></video></section>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="page2.mp4" type="video/mp4"></video></section>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="page3.mp4" type="video/mp4"></video></section>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="page4.mp4" type="video/mp4"></video></section>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="page5.mp4" type="video/mp4"></video></section>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="page6.mp4" type="video/mp4"></video></section>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="page7.mp4" type="video/mp4"></video></section>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="page8.mp4" type="video/mp4"></video></section>
-<section><video muted playsinline preload="auto" webkit-playsinline><source src="page9.mp4" type="video/mp4"></video></section>
+<button id="vol">🔊</button>
+<section data-audio="song1.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="Intro.mp4" type="video/mp4"></video></section>
+<section data-audio="song2.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="page2.mp4" type="video/mp4"></video></section>
+<section data-audio="song2.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="page3.mp4" type="video/mp4"></video></section>
+<section data-audio="song3.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="page4.mp4" type="video/mp4"></video></section>
+<section data-audio="song3.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="page5.mp4" type="video/mp4"></video></section>
+<section data-audio="song4.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="page6.mp4" type="video/mp4"></video></section>
+<section data-audio="song4.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="page7.mp4" type="video/mp4"></video></section>
+<section data-audio="song5.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="page8.mp4" type="video/mp4"></video></section>
+<section data-audio="song5.mp3"><video muted playsinline preload="auto" webkit-playsinline><source src="page9.mp4" type="video/mp4"></video></section>
 <script>
-if('scrollRestoration'in history)history.scrollRestoration='manual';scrollTo(0,0);
-const s=[...document.querySelectorAll('section')],b=document.getElementById('b');
-let a=0,l=0;
-const o=new IntersectionObserver(e=>{e.forEach(({target:t,isIntersecting:i})=>{const v=t.querySelector('video');if(!v||!a)return;if(i){v.currentTime=0;v.play().catch(()=>setTimeout(()=>v.play().catch(()=>{}),100));let d=0;const c=()=>{if(d||!v.duration||v.duration-v.currentTime>.2||l)return;d=1;const x=s.indexOf(t),n=s[x+1];if(n){l=1;n.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>l=0,1e3)}v.removeEventListener('timeupdate',c)};v.addEventListener('timeupdate',c)}else v.pause()})},{threshold:.5});
-s.forEach(x=>o.observe(x));
-b.onclick=()=>{a=1;b.classList.add('h');const v=s[0].querySelector('video');v.currentTime=0;v.play().catch(()=>setTimeout(()=>v.play().catch(()=>{}),100));let d=0;const c=()=>{if(d||!v.duration||v.duration-v.currentTime>.2||l)return;d=1;if(s[1]){l=1;s[1].scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>l=0,1e3)}v.removeEventListener('timeupdate',c)};v.addEventListener('timeupdate',c)};
-addEventListener('scroll',()=>{},{passive:!0});
-addEventListener('DOMContentLoaded',()=>s.forEach(x=>x.querySelector('video').load()));
+'use strict';
+if('scrollRestoration'in history)history.scrollRestoration='manual';
+scrollTo(0,0);
+
+const s=document.querySelectorAll('section'),b=document.getElementById('b'),v=document.getElementById('vol');
+let a=0,l=0,c=null,m=0;
+const au={},vc=new WeakMap();
+
+// Preload all audio with loop
+const u=new Set();
+s.forEach(e=>{
+  const src=e.dataset.audio;
+  if(src&&!u.has(src)){
+    u.add(src);
+    const ad=new Audio(src);
+    ad.preload='auto';
+    ad.volume=.7;
+    ad.loop=!0;
+    au[src]=ad;
+  }
+});
+
+v.onclick=()=>{m=!m;v.textContent=m?'🔇':'🔊';Object.values(au).forEach(x=>x.muted=m)};
+
+const playAud=src=>{
+  if(!src||c===src)return;
+  Object.values(au).forEach(x=>x.pause());
+  const ad=au[src];
+  if(ad){ad.currentTime=0;ad.muted=m;ad.play().catch(()=>{});c=src}
+};
+
+const getVis=()=>{
+  for(let e of s){
+    const r=e.getBoundingClientRect();
+    if(r.top>=-innerHeight*.5&&r.top<innerHeight*.5)return e;
+  }
+  return null;
+};
+
+const playVid=vid=>{
+  if(!vid)return;
+  vid.currentTime=0;
+  vid.play().catch(()=>setTimeout(()=>vid.play().catch(()=>{}),100));
+};
+
+const setupAdv=(vid,sec)=>{
+  if(vc.has(vid))return;
+  let d=0;
+  const adv=()=>{
+    if(d||!vid.duration||vid.duration-vid.currentTime>.2||l)return;
+    d=1;
+    const i=Array.from(s).indexOf(sec),n=s[i+1];
+    if(n){l=1;n.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>l=0,1e3)}
+  };
+  vid.addEventListener('timeupdate',adv);
+  vc.set(vid,!0);
+};
+
+const o=new IntersectionObserver(e=>{
+  e.forEach(({target:t,isIntersecting:i})=>{
+    const vid=t.querySelector('video'),src=t.dataset.audio;
+    if(!vid||!a)return;
+    if(i){
+      if(src)playAud(src);
+      playVid(vid);
+      setupAdv(vid,t);
+    }else{
+      vid.pause();
+      const vis=getVis();
+      if(src&&vis?.dataset.audio!==src)au[src]?.pause();
+    }
+  });
+},{threshold:.5});
+
+s.forEach(e=>o.observe(e));
+
+b.onclick=()=>{
+  a=1;b.classList.add('h');
+  const sec=s[0],vid=sec.querySelector('video'),src=sec.dataset.audio;
+  if(src)playAud(src);
+  playVid(vid);
+  setupAdv(vid,sec);
+};
+
+// Preload all videos immediately
+s.forEach(e=>e.querySelector('video').load());
+
+// Prevent double-tap zoom
+let lt=0;
+document.addEventListener('touchend',e=>{
+  const n=Date.now();
+  if(n-lt<=300)e.preventDefault();
+  lt=n;
+},{passive:!1});
 </script>
 </body>
 </html>
-
